@@ -18,6 +18,9 @@ def is_year_leap(year):
 
 # Вызываем функцию и сохраняем результат в переменную
 year = 2024
+year = 2015
+year = 2028
+year = 2009
 result = is_year_leap(year)
 
 # Выводим результат
