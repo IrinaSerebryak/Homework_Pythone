@@ -4,57 +4,44 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 import time
 
+driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 
-def test_login():
+try:
+    driver.implicitly_wait(10)
 
-    driver = None
+    driver.get("http://the-internet.herokuapp.com/login")
 
-    try:
-        driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
+    print("Страница логина успешно загружена")
 
-        driver.implicitly_wait(10)
+    username_field = driver.find_element(By.ID, "username")
+    username_field.send_keys("tomsmith")
+    print("Введен username: tomsmith")
 
-        driver.get("http://the-internet.herokuapp.com/login")
+    password_field = driver.find_element(By.ID, "password")
+    password_field.send_keys("SuperSecretPassword!")
+    print("Введен password: SuperSecretPassword!")
 
-        print("Страница логина успешно загружена")
-        print(f"Заголовок страницы: {driver.title}")
+    time.sleep(1)
 
-        username_field = driver.find_element(By.ID, "username")
-        username_field.send_keys("tomsmith")
-        print("✓ Введен username: tomsmith")
+    login_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    login_button.click()
+    print("Нажата кнопка Login")
 
-        password_field = driver.find_element(By.ID, "password")
-        password_field.send_keys("SuperSecretPassword!")
-        print("✓ Введен password: SuperSecretPassword!")
+    time.sleep(2)
 
-        time.sleep(3)
+    success_message = driver.find_element(By.CSS_SELECTOR, ".flash.success")
 
-        login_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
-        login_button.click()
-        print("✓ Нажата кнопка Login")
+    message_text = success_message.text
+    print("\n" + "=" * 50)
+    print("ТЕКСТ ИЗ ЗЕЛЕНОЙ ПЛАШКИ:")
+    print(message_text)
+    print("=" * 50)
 
-        time.sleep(3)
+    time.sleep(5)
 
-        success_message = driver.find_element(By.CLASS_NAME, "success")
+    print("Скрипт выполнен успешно!")
 
-        message_text = success_message.text
-        print("\n" + "=" * 50)
-        print("ТЕКСТ ИЗ ЗЕЛЕНОЙ ПЛАШКИ:")
-        print(message_text)
-        print("=" * 50)
+finally:
 
-        time.sleep(3)
-
-        print("\nВсе операции выполнены успешно!")
-
-    except Exception as e:
-        print(f"❌ Произошла ошибка: {e}")
-
-    finally:
-
-        if driver:
-            driver.quit()
-            print("✓ Браузер закрыт методом quit()")
-
-if __name__ == "__main__":
-    test_login()
+    driver.quit()
+    print("Браузер закрыт")

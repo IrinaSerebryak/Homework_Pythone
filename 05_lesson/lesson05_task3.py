@@ -4,56 +4,36 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 import time
 
+driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 
-def test_input_field():
+try:
 
-    driver = None
+    driver.implicitly_wait(10)
 
-    try:
-        driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
+    driver.get("http://the-internet.herokuapp.com/inputs")
 
-        driver.implicitly_wait(10)
+    print("Страница успешно загружена")
 
-        driver.get("http://the-internet.herokuapp.com/inputs")
+    input_field = driver.find_element(By.TAG_NAME, "input")
 
-        print("Страница успешно загружена")
+    input_field.send_keys("Sky")
+    print("Введен текст: 'Sky'")
 
-        input_field = driver.find_element(By.XPATH, "//input[@type='number']")
+    time.sleep(1)
 
-        print("Найдено поле ввода")
+    input_field.clear()
+    print("Поле очищено")
 
-        input_field.send_keys("Sky")
-        print("✓ Введен текст: 'Sky'")
+    time.sleep(1)
 
-        current_value = input_field.get_attribute("value")
-        print(f"✓ Текущее значение поля: '{current_value}'")
+    input_field.send_keys("Pro")
+    print("Введен текст: 'Pro'")
 
-        time.sleep(3)
+    time.sleep(2)
 
-        input_field.clear()
-        print("✓ Поле очищено методом clear()")
+    print("Скрипт выполнен успешно!")
 
-        current_value = input_field.get_attribute("value")
-        print(f"✓ Значение после очистки: '{current_value}'")
+finally:
 
-        time.sleep(5)
-
-        input_field.send_keys("Pro")
-        print("✓ Введен текст: 'Pro'")
-
-        final_value = input_field.get_attribute("value")
-        print(f"✓ Финальное значение: '{final_value}'")
-
-        print("\nВсе операции выполнены успешно!")
-
-    except Exception as e:
-        print(f"❌ Произошла ошибка: {e}")
-
-    finally:
-        if driver:
-            driver.quit()
-            print("✓ Браузер закрыт методом quit()")
-
-
-if __name__ == "__main__":
-    test_input_field()
+    driver.quit()
+    print("Браузер закрыт")
