@@ -44,10 +44,5 @@ def test_slow_calculator():
         result_text = screen_element.text
         assert result_text == "15", f"Ожидался результат 15, но получили {result_text}"
 
-        print("Тест успешно завершен! Результат: 15")
-
-    except Exception as e:
-        print(f"Произошла ошибка: {e}")
-        raise
     finally:
         driver.quit()

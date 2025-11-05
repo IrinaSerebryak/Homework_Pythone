@@ -5,11 +5,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
 def test_form_validation():
-
     driver = webdriver.Edge()
 
     try:
-
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
 
         wait = WebDriverWait(driver, 30)
@@ -19,14 +17,12 @@ def test_form_validation():
         driver.find_element(By.NAME, "address").send_keys("Ленина, 55-3")
         driver.find_element(By.NAME, "e-mail").send_keys("test@skypro.com")
         driver.find_element(By.NAME, "phone").send_keys("+7985899998787")
-
         driver.find_element(By.NAME, "city").send_keys("Москва")
         driver.find_element(By.NAME, "country").send_keys("Россия")
         driver.find_element(By.NAME, "job-position").send_keys("QA")
         driver.find_element(By.NAME, "company").send_keys("SkyPro")
 
         submit_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']")))
-
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
 
         try:
@@ -37,12 +33,11 @@ def test_form_validation():
         try:
             wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "#zip-code.is-invalid")))
         except TimeoutException:
-
             import time
             time.sleep(30)
 
         zip_code_field = driver.find_element(By.ID, "zip-code")
-        assert "alert py-2 alert-danger" in zip_code_field.get_attribute("class"), "Поле Zip code не подсвечено красным"
+        assert "alert-danger" in zip_code_field.get_attribute("class"), "Поле Zip code не подсвечено красным"
         print("✓ Поле Zip code подсвечено красным")
 
         fields_to_check = [
@@ -59,18 +54,16 @@ def test_form_validation():
 
         for field_id, field_name in fields_to_check:
             field = driver.find_element(By.ID, field_id)
-            assert "alert py-2 alert-danger" in zip_code_field.get_attribute("class"), f"Поле {field_name} не подсвечено зеленым"
+            assert "alert-success" in field.get_attribute("class"), f"Поле {field_name} не подсвечено зеленым"
             print(f"✓ Поле {field_name} подсвечено зеленым")
 
         print("\nВсе проверки пройдены успешно!")
 
     except Exception as e:
         print(f"Ошибка: {e}")
-
         driver.save_screenshot("error_screenshot.png")
         raise
     finally:
-
         driver.quit()
 
 if __name__ == "__main__":

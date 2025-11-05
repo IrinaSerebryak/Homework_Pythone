@@ -3,16 +3,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.service import Service as FirefoxService
-import time
 
 
 def test_shopping_cart_total():
-
     driver = webdriver.Firefox()
     wait = WebDriverWait(driver, 10)
 
     try:
-
         driver.get("https://www.saucedemo.com/")
 
         username_field = wait.until(EC.presence_of_element_located((By.ID, "user-name")))
@@ -26,14 +23,15 @@ def test_shopping_cart_total():
 
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, "inventory_list")))
 
-        backpack_add_button = driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack")
-        backpack_add_button.click()
+        items_to_add = [
+            "add-to-cart-sauce-labs-backpack",
+            "add-to-cart-sauce-labs-bolt-t-shirt",
+            "add-to-cart-sauce-labs-onesie"
+        ]
 
-        tshirt_add_button = driver.find_element(By.ID, "add-to-cart-sauce-labs-bolt-t-shirt")
-        tshirt_add_button.click()
-
-        onesie_add_button = driver.find_element(By.ID, "add-to-cart-sauce-labs-onesie")
-        onesie_add_button.click()
+        for item_id in items_to_add:
+            add_button = driver.find_element(By.ID, item_id)
+            add_button.click()
 
         cart_icon = driver.find_element(By.CLASS_NAME, "shopping_cart_link")
         cart_icon.click()
@@ -60,14 +58,12 @@ def test_shopping_cart_total():
 
         assert total_amount == "58.29", f"Ожидалась сумма $58.29, но получили ${total_amount}"
 
-        print(f"Тест успешно завершен! Итоговая сумма: ${total_amount}")
-
     except Exception as e:
         print(f"Произошла ошибка: {e}")
         raise
     finally:
-
         driver.quit()
+
 
 if __name__ == "__main__":
     test_shopping_cart_total()
