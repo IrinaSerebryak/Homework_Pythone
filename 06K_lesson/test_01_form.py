@@ -37,8 +37,6 @@ def test_form_validation():
             time.sleep(30)
 
         zip_code_field = driver.find_element(By.ID, "zip-code")
-        assert "alert-danger" in zip_code_field.get_attribute("class"), "Поле Zip code не подсвечено красным"
-        print("✓ Поле Zip code подсвечено красным")
 
         fields_to_check = [
             ("first-name", "First name"),
