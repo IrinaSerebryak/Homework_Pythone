@@ -6,12 +6,9 @@ from selenium.common.exceptions import TimeoutException
 
 def test_form_validation():
     driver = webdriver.Edge()
-
     try:
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
-
         wait = WebDriverWait(driver, 30)
-
         wait.until(EC.presence_of_element_located((By.NAME, "first-name"))).send_keys("Иван")
         driver.find_element(By.NAME, "last-name").send_keys("Петров")
         driver.find_element(By.NAME, "address").send_keys("Ленина, 55-3")
@@ -21,15 +18,12 @@ def test_form_validation():
         driver.find_element(By.NAME, "country").send_keys("Россия")
         driver.find_element(By.NAME, "job-position").send_keys("QA")
         driver.find_element(By.NAME, "company").send_keys("SkyPro")
-
         submit_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']")))
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-
         try:
             submit_button.click()
         except:
             driver.execute_script("arguments[0].click();", submit_button)
-
         try:
             wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "#zip-code.is-invalid")))
         except TimeoutException:
@@ -37,6 +31,8 @@ def test_form_validation():
             time.sleep(30)
 
         zip_code_field = driver.find_element(By.ID, "zip-code")
+
+        assert "alert-danger" in zip_code_field.get_attribute("class"), "Поле Zip code не подсвечено красным"
 
         fields_to_check = [
             ("first-name", "First name"),
@@ -49,20 +45,11 @@ def test_form_validation():
             ("job-position", "Job position"),
             ("company", "Company")
         ]
-
         for field_id, field_name in fields_to_check:
             field = driver.find_element(By.ID, field_id)
             assert "alert-success" in field.get_attribute("class"), f"Поле {field_name} не подсвечено зеленым"
-            print(f"✓ Поле {field_name} подсвечено зеленым")
 
-        print("\nВсе проверки пройдены успешно!")
-
-    except Exception as e:
-        print(f"Ошибка: {e}")
-        driver.save_screenshot("error_screenshot.png")
-        raise
     finally:
         driver.quit()
-
 if __name__ == "__main__":
     test_form_validation()
