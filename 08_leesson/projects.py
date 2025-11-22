@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 # Загружаем переменные из .env файла
 load_dotenv()
 
-
 class ProjectsAPI:
     def __init__(self):
         self.base_url = os.getenv('YOUGILE_BASE_URL', 'https://ru.yougile.com')
